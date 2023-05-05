@@ -13,13 +13,27 @@ import java.util.List;
 
 public class KanbanService {
     private final ToDoRepo toDoRepo;
+    private final RandomId randomId;
 
 
     public List<ToDo> getListTodos() {
         return toDoRepo.getAllToDosAsList();
     }
 
-    public ToDo addNewTask(String task) {
+    public ToDo addNewTask(ToDo task) {
+        task.setId(randomId.getRandomId());
         return toDoRepo.addNewTask(task);
+    }
+
+    public ToDo getActualTask(String id) {
+        return toDoRepo.getActualTask(id);
+    }
+
+    public List<ToDo> editTodo(String id , ToDo task) {
+        return toDoRepo.editTodo(id, task);
+    }
+
+    public List<ToDo> deleteTask(String id) {
+        return toDoRepo.deleteTask(id);
     }
 }

@@ -4,25 +4,34 @@ import de.neuefische.backend.model.ToDo;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @Data
 public class ToDoRepo {
-    private final List<ToDo> toDoList = new ArrayList<>();
+    private final Map<String, ToDo> toDoMap = new HashMap<>();
 
 
     public List<ToDo> getAllToDosAsList(){
-        return toDoList;
+        return new ArrayList<>(toDoMap.values());
     }
 
+    public ToDo addNewTask(ToDo task) {
+        toDoMap.put(task.getId(), task);
+        return task;
+    }
 
-    public ToDo addNewTask(String task) {
-        ToDo toDo = new ToDo(task);
-        toDoList.add(toDo);
-        return toDo;
+    public ToDo getActualTask(String id) {
+        return toDoMap.get(id);
+    }
+
+    public List<ToDo> editTodo(String id, ToDo task) {
+        toDoMap.put(id, task);
+        return getAllToDosAsList();
+    }
+
+    public List<ToDo> deleteTask(String id) {
+        toDoMap.remove(id);
+        return getAllToDosAsList();
     }
 }
