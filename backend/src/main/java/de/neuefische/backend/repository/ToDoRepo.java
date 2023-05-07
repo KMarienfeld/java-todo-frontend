@@ -1,15 +1,19 @@
 package de.neuefische.backend.repository;
 
 import de.neuefische.backend.model.ToDo;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ToDoRepo {
-    private final Map<String, ToDo> toDoMap = new HashMap<>();
+    private Map<String, ToDo> toDoMap = new HashMap<>();
 
 
     public List<ToDo> getAllToDosAsList(){
@@ -34,4 +38,6 @@ public class ToDoRepo {
         toDoMap.remove(id);
         return getAllToDosAsList();
     }
+
+
 }
