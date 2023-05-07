@@ -9,9 +9,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
+
 public class ToDo {
 
     private String description;
     private String status;
     private String id;
+
+    public ToDo(String description, String status) {
+    }
 }
