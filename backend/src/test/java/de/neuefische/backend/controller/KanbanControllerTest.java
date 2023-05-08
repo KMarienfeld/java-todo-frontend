@@ -2,6 +2,7 @@ package de.neuefische.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.neuefische.backend.model.ToDo;
+import org.assertj.core.internal.ErrorMessages;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -99,12 +101,8 @@ class KanbanControllerTest {
     void getTodoById_returnStatus404_throwResponseStatusExceptions() throws Exception {
         //given
         //when + then
-        try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/todo/imInvalid"))
-            .andExpect(status().is(404));
-        } catch (ResponseStatusException e) {
-            assertEquals("No User find with ID: imInvalid", e.getCause().getMessage());
-        }
+                    .andExpect(status().is(404));
 
     }
     @Test
