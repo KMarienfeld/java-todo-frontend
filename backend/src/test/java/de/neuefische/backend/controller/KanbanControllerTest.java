@@ -10,6 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ class KanbanControllerTest {
     MockMvc mockMvc;
     @Test
     @DirtiesContext
-    void getAllTodos() throws Exception {
+    void getAllTodos_returnInitialEmptyListOfTodos_return200() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/todo"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
@@ -64,7 +65,7 @@ class KanbanControllerTest {
 
     @Test
     @DirtiesContext
-    void getDetails() throws Exception {
+    void getTodoByID_return200Ok_andCorrectTodo() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/todo")
                         .contentType("application/json")
                         .content("""
@@ -89,10 +90,23 @@ class KanbanControllerTest {
                     "description": "Hallo", 
                     "status":"OPEN"
                 }
-                """));
+                """))
+                .andExpect(jsonPath("$.id").value(todo.getId()));
 
     }
+    @Test
+    @DirtiesContext
+    void getTodoById_returnStatus404_throwResponseStatusExceptions() throws Exception {
+        //given
+        //when + then
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/todo/imInvalid"))
+            .andExpect(status().is(404));
+        } catch (ResponseStatusException e) {
+            assertEquals("No User find with ID: imInvalid", e.getCause().getMessage());
+        }
 
+    }
     @Test
     @DirtiesContext
     void editTodo_ThenReturn200OK_ReturnCorrectTask() throws Exception {
