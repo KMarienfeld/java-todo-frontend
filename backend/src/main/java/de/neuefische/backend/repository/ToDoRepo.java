@@ -4,7 +4,9 @@ import de.neuefische.backend.model.ToDo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -26,10 +28,16 @@ public class ToDoRepo {
     }
 
     public ToDo getActualTask(String id) {
-        return toDoMap.get(id);
+        if (toDoMap.containsKey(id)) {
+            return toDoMap.get(id);
+        } else {
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "No User found withID: "+id);
+        }
+
     }
 
     public List<ToDo> editTodo(String id, ToDo task) {
+        getActualTask(task.getId());
         toDoMap.put(id, task);
         return getAllToDosAsList();
     }
